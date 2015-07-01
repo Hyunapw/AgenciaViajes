@@ -1,0 +1,49 @@
+Reserva de Aviones y asientos
+(Las tablas en plural)
+
+CLIENTES
+id
+nombre
+
+AVIONES
+id
+plazas (16 plazas)
+modelo
+
+DESTINOS
+id
+lugar
+
+
+RELACION AVIONES-DESTINOS
+Es una relacion N-N.
+Se necesita una tabla intermedia.
+
+AVIONDESTINO
+Una clave primaria compuesta
+(key) av_id
+(key) destion_id
+precio
+fvuelo
+
+RESERVA
+id
+cli_id
+av_id
+asiento
+fvuelo
+
+
+
+ELEGIR EL ASIENTO
+
+SELECT *
+FROM reservas, aviones
+WHERE av_id = res_av_id
+AND res_fvuelo ? (el cliente debe selecionar la fecha)
+AND av_id =? (y debe seleccionar el avion, desde un JTable
+
+Devuelve todos los asientos ocupados
+Sabiendo la capacidad del avion,
+debemos obtener los asientos libres.
+
