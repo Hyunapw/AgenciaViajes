@@ -28,9 +28,7 @@ public class Destinos extends BDD {
 			try {
 				lista = new ArrayList<>();
 				while (rs.next() == true) {
-					int id = rs.getInt("des_id");
-					String lugar = rs.getString("des_lugar");
-					lista.add(new Destino(id, lugar));
+					lista.add(new Destino(rs.getInt("des_id"), rs.getString("des_lugar")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

@@ -53,9 +53,7 @@ public class CbDestinos extends JComboBox<Destino> {
 	protected void recargarComboFiltrado() {
 		removeAllItems();
 		ArrayList<String> filtros = new ArrayList<>();
-		filtros.add("clientes.nombre LIKE '%" + cbFiltro + "%'");
-		filtros.add("clientes.apellidos LIKE '%" + cbFiltro + "%'");
-		filtros.add("clientes.nif LIKE '%" + cbFiltro + "%'");
+		filtros.add("destinos.des_lugar LIKE '%" + cbFiltro + "%'");
 		String filtroString = Utilidades.creaFiltroOR(filtros);
 		ArrayList<Destino> lista = new Destinos().recuperaPorFiltro(filtroString);
 		if (lista!=null) {

@@ -2,16 +2,18 @@ package controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Vector;
 
 import javax.sql.rowset.CachedRowSet;
 
 import util.Utilidades;
 import controller.BDD;
+import model.Avion;
+import model.Destino;
 import model.Vuelo;
+import model.VueloCompleto;
 
-public class Vuelos extends BDD {
+public class VuelosCompletos extends BDD {
 	
 	/*	CREATE TABLE vuelos (
     vu_id     INTEGER        PRIMARY KEY AUTOINCREMENT,
@@ -23,22 +25,26 @@ public class Vuelos extends BDD {
     vu_precio DECIMAL (7, 2) NOT NULL
 );*/
 	
-	public ArrayList<Vuelo> recuperaPorFiltro(String filtro) {
-		String sql = "SELECT * FROM vuelos WHERE ";
+	public ArrayList<VueloCompleto> recuperaPorFiltro(String filtro) {
+		//String sql = "SELECT vu_id, vu_av_id, av_modelo, av_capacidad, vu_des_id, des_lugar, vu_fvuelo, vu_precio FROM vuelos, aviones, destinos WHERE ";
+		String sql = "SELECT * FROM vuelos, aviones, destinos WHERE ";
+		sql += "vuelos.vu_av_id=aviones.av_id AND vuelos.vu_des_id=destinos.des_id AND (";
 		sql += filtro == null || filtro.length() == 0 ? "1" : filtro;
-		sql += " ORDER BY vuelos.vu_id";
-		ArrayList<Vuelo> lista = null;
+		sql += ") ORDER BY vuelos.vu_fvuelo";
+		ArrayList<VueloCompleto> lista = null;
 		CachedRowSet rs = consultaSQL(sql);
 		if (rs!=null){
 			try {
 				lista = new ArrayList<>();
 				while (rs.next() == true) {
-					int id = rs.getInt("vu_id");
-					int av_id = rs.getInt("vu_av_id");
-					int des_id = rs.getInt("vu_des_id");
-					Date fvuelo = Utilidades.validarFechaHora(rs.getString("vu_fvuelo"));
-					double precio = rs.getDouble("vu_precio");;
-					lista.add(new Vuelo(id, av_id, des_id, fvuelo, precio));
+					lista.add(new VueloCompleto(rs.getInt("vu_id"), 
+							new Avion(rs.getInt("av_id"), 
+									rs.getString("av_modelo"), 
+									rs.getInt("av_capacidad")), 
+									new Destino(rs.getInt("des_id"), 
+									rs.getString("des_lugar")),
+									Utilidades.validarFechaHora(rs.getString("vu_fvuelo")),
+									rs.getDouble("vu_precio")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -47,23 +53,23 @@ public class Vuelos extends BDD {
 		return lista;
 	}
 	
-	public ArrayList<Vuelo> recuperaTodos(){
+	public ArrayList<VueloCompleto> recuperaTodos(){
 		return recuperaPorFiltro(null);
 	}
 	
-	public Vuelo recuperaPorId(int id){
+	public VueloCompleto recuperaPorId(int id){
 		if (id != 0) {
 			String filtro = "vuelos.vu_id = " + id;
-			ArrayList<Vuelo> lista = recuperaPorFiltro(filtro);
+			ArrayList<VueloCompleto> lista = recuperaPorFiltro(filtro);
 			return lista.get(0);
 		} else {
-			Vuelo c = new Vuelo();
+			VueloCompleto c = new VueloCompleto();
 			c.setId(0);
 			return c;
 		}
 	}
 	
-	public Integer grabar(Vuelo vu) {
+	public Integer grabar(VueloCompleto vu) {
 		String sql = null;
 		if (vu.getId()==null) {
 			/*SQLite*/
@@ -92,16 +98,16 @@ public class Vuelos extends BDD {
 		ArrayList<Vector<Object>> tableData = null;
 		ArrayList<String> filtros = new ArrayList<>();
 		filtros.add("vuelos.vu_precio LIKE '%" + txtFiltro + "%'");
+		filtros.add("destinos.des_lugar LIKE '%" + txtFiltro + "%'");
+		filtros.add("aviones.av_modelo LIKE '%" + txtFiltro + "%'");
 		String filtro = Utilidades.creaFiltroOR(filtros);
-		ArrayList<Vuelo> lista = recuperaPorFiltro(filtro);
+		ArrayList<VueloCompleto> lista = recuperaPorFiltro(filtro);
 		if (lista!=null) {
 			tableData = new ArrayList<>();
-			for (Vuelo vuelo : lista) {
+			for (VueloCompleto vuelo : lista) {
 				Vector<Object> filaData = new Vector<>();
 				filaData.add(vuelo);
-				filaData.add(vuelo.getAv_id());
-				filaData.add(vuelo.getDes_id());
-				filaData.add(vuelo.getFvuelo());
+				filaData.add(vuelo.getCapacidad());
 				filaData.add(vuelo.getPrecio());
 				tableData.add(filaData);
 			}

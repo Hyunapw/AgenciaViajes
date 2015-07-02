@@ -29,10 +29,7 @@ public class Aviones extends BDD {
 			try {
 				lista = new ArrayList<>();
 				while (rs.next() == true) {
-					int id = rs.getInt("av_id");
-					String modelo = rs.getString("av_modelo");
-					int capacidad = rs.getInt("av_capacidad");
-					lista.add(new Avion(id, modelo, capacidad));
+					lista.add(new Avion(rs.getInt("av_id"), rs.getString("av_modelo"), rs.getInt("av_capacidad")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

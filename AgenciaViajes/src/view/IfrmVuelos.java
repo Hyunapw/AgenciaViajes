@@ -5,6 +5,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,106 +15,128 @@ import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 
 import controller.Vuelos;
+import controller.VuelosCompletos;
 import model.Vuelo;
+import model.VueloCompleto;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JSpinner;
 import java.awt.Dimension;
+
+import com.toedter.calendar.JDateChooser;
+
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class IfrmVuelos extends JInternalFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private TbDestinos tbDestinos;
+	private TbVuelosCompletos tbVuelos;
 	private JTextField txtFiltro;
-	private JSpinner numPrecio;
 	
 	public IfrmVuelos() {
 		setTitle("Editor de Vuelos");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setClosable(true);
 		setResizable(true);
-		setBounds(0, 0, 795, 300);
+		setBounds(0, 0, 650, 300);
 		
-		JPanel panel = new JPanel();
-		getContentPane().add(panel, BorderLayout.NORTH);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JPanel panel_1 = new JPanel();
+		getContentPane().add(panel_1, BorderLayout.NORTH);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel lblAvion = new JLabel("Avion");
-		panel.add(lblAvion);
+		panel_1.add(lblAvion);
 		
 		CbAviones cbAviones = new CbAviones();
 		cbAviones.setPreferredSize(new Dimension(120, 20));
-		panel.add(cbAviones);
-		
-		JButton button = new JButton("+");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Vuelo cli = new Vuelo(null, av_id, des_id, fvuelo, precio);
-				Vuelo cli = new Vuelo();
-				int resultado = new Vuelos().grabar(cli);
-				System.out.println(resultado);
-//				Vector<Object> filaData = new Vector<>();
-//				filaData.add(cli);
-//				filaData.add(cli.getNombre());
-//				DefaultTableModel datos = (DefaultTableModel) tbclientes.getModel();
-//				datos.addRow(filaData);
-				tbDestinos.actualizarTabla(txtFiltro.getText());
-			}
-		});
+		panel_1.add(cbAviones);
 		
 		JLabel lblDestino = new JLabel("Destino");
-		panel.add(lblDestino);
+		panel_1.add(lblDestino);
 		
 		CbDestinos cbDestinos = new CbDestinos();
 		cbDestinos.setPreferredSize(new Dimension(120, 20));
-		panel.add(cbDestinos);
+		panel_1.add(cbDestinos);
 		
 		JLabel lblFecha = new JLabel("Fecha");
-		panel.add(lblFecha);
+		panel_1.add(lblFecha);
 		
 		JDateChooser cbFecha = new JDateChooser();
-		panel.add(cbFecha);
+		panel_1.add(cbFecha);
 		
 		JLabel lblPrecio = new JLabel("Precio");
-		panel.add(lblPrecio);
+		panel_1.add(lblPrecio);
 		
-		numPrecio = new JSpinner();
-		numPrecio.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
+		JSpinner numPrecio = new JSpinner();
+		numPrecio.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
 		numPrecio.setPreferredSize(new Dimension(70, 20));
-		panel.add(numPrecio);
-		panel.add(button);
+		panel_1.add(numPrecio);
+		
+		JButton btnAdd = new JButton("+");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Vuelo cli = new Vuelo(null, cbAviones.obtenerAvionIdSeleccionado(), cbDestinos.obtenerDestinoIdSeleccionado(), cbFecha.getDate(), (double) numPrecio.getValue());
+				int resultado = new Vuelos().grabar(cli);
+				System.out.println(resultado);
+				tbVuelos.actualizarTabla(txtFiltro.getText());
+			}
+		});
+		panel_1.add(btnAdd);
+		
+		JSeparator separator_1 = new JSeparator();
+		panel_1.add(separator_1);
+		
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.SOUTH);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JSeparator separator = new JSeparator();
 		panel.add(separator);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setViewportView(tbDestinos);
-		
-		JPanel panel_2 = new JPanel();
-		getContentPane().add(panel_2, BorderLayout.SOUTH);
-		
 		txtFiltro = new JTextField();
-		panel_2.add(txtFiltro);
-		txtFiltro.setColumns(30);
+		panel.add(txtFiltro);
+		txtFiltro.setColumns(10);
 		
 		JButton btnNewButton = new JButton("");
-		panel_2.add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tbDestinos.actualizarTabla(txtFiltro.getText());
+				tbVuelos.actualizarTabla(txtFiltro.getText());
 			}
 		});
 		btnNewButton.setIcon(new ImageIcon(IfrmVuelos.class.getResource("/icons/filter16.png")));
+		panel.add(btnNewButton);
 		
-		tbDestinos = new TbDestinos(txtFiltro.getText());
+		JScrollPane scrollPane = new JScrollPane();
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		tbVuelos = new TbVuelosCompletos(txtFiltro.getText());
+		tbVuelos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				System.out.println(me);
+				
+				if (me.getClickCount()>=2 && me.getButton()==MouseEvent.BUTTON1) {
+					System.out.println("Doble click con el Boton 1");
+					TbVuelosCompletos table = (TbVuelosCompletos) me.getComponent();
+					VueloCompleto vuc = null;
+					try {
+						vuc = (VueloCompleto) table.getValueAt(table.getSelectedRow(), 0);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					new DlgVuelo(vuc.toVuelo());
+				}
+				
+			}
+		});
+		scrollPane.setViewportView(tbVuelos);
 		mostrar();
 	}
 	

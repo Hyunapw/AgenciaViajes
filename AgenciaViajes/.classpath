@@ -17,6 +17,10 @@
 	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.collections.jar"/>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.6.7.jar"/>
-	<classpathentry kind="lib" path="lib/jgoodies-forms-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-binding-2.13.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-common-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-forms-1.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-looks-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-validation-2.5.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

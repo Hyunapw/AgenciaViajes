@@ -7,8 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import controller.Vuelos;
-import model.Vuelo;
+import controller.VuelosCompletos;
 import model.VueloCompleto;
 
 import javax.swing.event.TableModelEvent;
@@ -19,14 +18,14 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class TbVuelos extends JTable {
+public class TbVuelosCompletos extends JTable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -371381706871909469L;
 	private String filtro;
 	
-	public TbVuelos(String fil) {
+	public TbVuelosCompletos(String fil) {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {
@@ -45,19 +44,19 @@ public class TbVuelos extends JTable {
 					public void tableChanged(TableModelEvent tme) {
 						int fila = getEditingRow();
 						int columna = getEditingColumn();
-						Vuelo vu;
+						VueloCompleto vuc;
 						valorFinal = tm.getValueAt(fila,columna);
 						tm.removeTableModelListener(this);
-						vu = (Vuelo) tm.getValueAt(getEditingRow(), 0);
+						vuc = (VueloCompleto) tm.getValueAt(getEditingRow(), 0);
 						switch (columna) {
-						case 1:
-							vu.setPrecio(((Double) valorFinal));
+						case 2:
+							vuc.setPrecio(((Double) valorFinal));
 							break;
 						default:
 							break;
 						}
-						ponerVuelo(getEditingRow(), vu);
-						Integer respuesta = new Vuelos().grabar(vu);
+						ponerVuelo(getEditingRow(), vuc);
+						Integer respuesta = new VuelosCompletos().grabar(vuc);
 						if (respuesta==null) {
 							actualizarTabla(filtro);
 						}
@@ -67,17 +66,23 @@ public class TbVuelos extends JTable {
 		});
 		setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null},
+				{null, null, null},
 			},
 			new String[] {
-				"Vuelo", "Precio"
+				"Vuelo", "Capacidad Total", "Precio por Plaza"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				VueloCompleto.class, Double.class
+				VueloCompleto.class, Integer.class, Double.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				true, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 		setAutoCreateRowSorter(true);
@@ -86,7 +91,7 @@ public class TbVuelos extends JTable {
 	
 	public void actualizarTabla(String filtro) {
 		this.setFiltro(filtro);
-		ArrayList<Vector<Object>> tabla = new Vuelos().recuperaTablaVuelos(filtro);
+		ArrayList<Vector<Object>> tabla = new VuelosCompletos().recuperaTablaVuelos(filtro);
 		if (tabla!=null) {
 			DefaultTableModel dtm = (DefaultTableModel) getModel();
 			dtm.setRowCount(0);
@@ -96,10 +101,11 @@ public class TbVuelos extends JTable {
 		}
 	}
 	
-	private void ponerVuelo(int row, Vuelo vu) {
+	private void ponerVuelo(int row, VueloCompleto vuc) {
 		Vector<Object> filaData = new Vector<>();
-		filaData.add(vu);
-		filaData.add(vu.getPrecio());
+		filaData.add(vuc);
+		filaData.add(vuc.getCapacidad());
+		filaData.add(vuc.getPrecio());
 		DefaultTableModel dtm = (DefaultTableModel) getModel();
 		dtm.removeRow(row);
 		dtm.insertRow(row, filaData);

@@ -35,4 +35,12 @@ public class Destino {
 		this.lugar = lugar;
 	}
 
+	@Override
+	public String toString() {
+		return "Destino " + id + ", " + lugar;
+	}
+
+	
+	
+	
 }

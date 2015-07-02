@@ -1,12 +1,14 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 public class Pruebas extends JFrame{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private TbVuelosCompletos table;
 
 	public Pruebas() {
 		setTitle("Pruebas");
@@ -24,6 +26,13 @@ public class Pruebas extends JFrame{
 		CbDestinos cbDestinos = new CbDestinos();
 		cbDestinos.setBounds(33, 94, 166, 29);
 		getContentPane().add(cbDestinos);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(34, 146, 566, 147);
+		getContentPane().add(scrollPane);
+		
+		table = new TbVuelosCompletos("");
+		scrollPane.setViewportView(table);
 		
 		setVisible(true);
 	}

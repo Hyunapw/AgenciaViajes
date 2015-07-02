@@ -53,9 +53,7 @@ public class CbAviones extends JComboBox<Avion> {
 	protected void recargarComboFiltrado() {
 		removeAllItems();
 		ArrayList<String> filtros = new ArrayList<>();
-		filtros.add("clientes.nombre LIKE '%" + cbFiltro + "%'");
-		filtros.add("clientes.apellidos LIKE '%" + cbFiltro + "%'");
-		filtros.add("clientes.nif LIKE '%" + cbFiltro + "%'");
+		filtros.add("aviones.av_modelo LIKE '%" + cbFiltro + "%'");
 		String filtroString = Utilidades.creaFiltroOR(filtros);
 		ArrayList<Avion> lista = new Aviones().recuperaPorFiltro(filtroString);
 		if (lista!=null) {

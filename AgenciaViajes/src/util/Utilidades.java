@@ -74,13 +74,25 @@ public class Utilidades {
 		}
 	}
 	
-	public static String fechaAstring (Date fecha) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		return sdf.format(fecha);
+	public static Date validarFechaHora(String stringFecha) {
+		if (stringFecha == null || stringFecha.length()==0 ) {
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		try {
+			return sdf.parse(stringFecha);
+		} catch (ParseException e) {
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			try {
+				return sdf.parse(stringFecha);
+			} catch (ParseException e1) {
+				return null;
+			}
+		}
 	}
 	
-	public static String fechaToSQL (Date fecha) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	public static String fechaAstring (Date fecha) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		return sdf.format(fecha);
 	}
 	
@@ -102,6 +114,16 @@ public class Utilidades {
 		String filtro = filtros.get(filtros.size()-1);
 		stringFiltro += filtro;
 		return stringFiltro;
+	}
+	
+	public static String fechaToSQL (Date fecha) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(fecha);
+	}
+
+	public static String fechaHoraToSQLite(Date fecha) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(fecha);
 	}
 	
 }
