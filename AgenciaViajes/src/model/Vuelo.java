@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import util.Utilidades;
+
 public class Vuelo {
 	
 /*	CREATE TABLE vuelos (
@@ -14,7 +16,7 @@ public class Vuelo {
 		    vu_precio DECIMAL (7, 2) NOT NULL
 		);*/
 	
-	Integer id;
+	Integer vuId;
 	int av_id;
 	int des_id;
 	Date fvuelo;
@@ -24,19 +26,19 @@ public class Vuelo {
 	}
 
 	public Vuelo(Integer id, int av_id, int des_id, Date fvuelo, double precio) {
-		this.id = id;
+		this.vuId = id;
 		this.av_id = av_id;
 		this.des_id = des_id;
 		this.fvuelo = fvuelo;
 		this.precio = precio;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getVuId() {
+		return vuId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setVuId(Integer id) {
+		this.vuId = id;
 	}
 
 	public int getAv_id() {
@@ -70,5 +72,13 @@ public class Vuelo {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
+
+	@Override
+	public String toString() {
+		return "Vuelo " + vuId + " (A" + av_id + "D"
+				+ des_id + " del " + Utilidades.fechaHoraToSQLite(fvuelo);
+	}
+	
+	
 	
 }

@@ -4,8 +4,6 @@ import java.awt.Rectangle;
 
 import javax.swing.JDialog;
 
-import model.Avion;
-import model.Destino;
 import model.Vuelo;
 
 import javax.swing.JPanel;
@@ -14,9 +12,12 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
+
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+
 import com.toedter.calendar.JDateChooser;
+
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
@@ -114,6 +115,13 @@ public class DlgVuelo extends JDialog {
 		JButton btnAceptar = new JButton("Cancelar");
 		sur.add(btnAceptar);
 
+	}
+	
+	// METODOS PUBLICOS
+	public Vuelo mostrar() {
+		setVisible(true);
+		dispose();
+		return vuelo;
 	}
 
 }

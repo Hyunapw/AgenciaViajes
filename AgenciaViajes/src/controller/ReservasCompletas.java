@@ -7,10 +7,12 @@ import java.util.Vector;
 import javax.sql.rowset.CachedRowSet;
 
 import util.Utilidades;
-import controller.BDD;
+import model.Cliente;
 import model.Reserva;
+import model.ReservaCompleta;
+import model.Vuelo;
 
-public class Reservas extends BDD {
+public class ReservasCompletas extends Reservas {
 	
 	/*	CREATE TABLE reservas (
     res_id      INTEGER PRIMARY KEY AUTOINCREMENT
@@ -22,11 +24,11 @@ public class Reservas extends BDD {
     res_asiento INTEGER NOT NULL
 );*/
 	
-	public ArrayList<Reserva> recuperaPorFiltro(String filtro) {
+	public ArrayList<ReservaCompleta> recuperaReservaCompletaPorFiltro(String filtro) {
 		String sql = "SELECT * FROM reservas WHERE ";
 		sql += filtro == null || filtro.length() == 0 ? "1" : filtro;
 		sql += " ORDER BY reservas.res_id";
-		ArrayList<Reserva> lista = null;
+		ArrayList<ReservaCompleta> lista = null;
 		CachedRowSet rs = consultaSQL(sql);
 		if (rs!=null){
 			try {
@@ -36,7 +38,10 @@ public class Reservas extends BDD {
 					int vu_id = rs.getInt("res_vu_id");
 					int cli_id = rs.getInt("res_cli_id");
 					int asiento = rs.getInt("res_asiento");
-					lista.add(new Reserva(id, vu_id, cli_id, asiento));
+					Reserva reserva = new Reserva(id, vu_id, cli_id, asiento);
+					Vuelo vuelo = new Vuelos().recuperaPorId(vu_id);
+					Cliente cliente = new Clientes().recuperaPorId(cli_id);
+					lista.add(new ReservaCompleta(reserva, vuelo, cliente));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -45,47 +50,18 @@ public class Reservas extends BDD {
 		return lista;
 	}
 	
-	public ArrayList<Reserva> recuperaTodos(){
-		return recuperaPorFiltro(null);
-	}
-	
-	public Reserva recuperaPorId(int id){
-		if (id != 0) {
-			String filtro = "reservas.res_id = " + id;
-			ArrayList<Reserva> lista = recuperaPorFiltro(filtro);
-			return lista.get(0);
-		} else {
-			Reserva c = new Reserva();
-			c.setResId(0);
-			return c;
-		}
-	}
-	
-	public Integer grabar(Reserva res) {
-		String sql = null;
-		if (res.getResId()==null) {
-			/*SQLite*/
-			sql = "INSERT INTO reservas (res_vu_id, res_cli_id, res_asiento) VALUES ("+ res.getVu_id() + "," + res.getCli_id() + "," + res.getAsiento() + ")";
-		} else {		
-			sql = "UPDATE reservas SET " +
-					"res_vu_id=" + res.getVu_id() + ", res_cli_id=" + res.getCli_id() + ", res_asiento=" + res.getAsiento()+ " WHERE reservas.res_id=" + res.getResId()
-					;
-		}
-		return ejecutaSQL(sql);
-	}
-	
 	/*
 	 * RECUPERAR TABLAS ESPECIALES
 	 * */
-	public ArrayList<Vector<Object>> recuperaTablaReservas(String txtFiltro) {
+	public ArrayList<Vector<Object>> recuperaTablaReservasCompletas(String txtFiltro) {
 		ArrayList<Vector<Object>> tableData = null;
 		ArrayList<String> filtros = new ArrayList<>();
 		filtros.add("reservas.res_id LIKE '%" + txtFiltro + "%'");
 		String filtro = Utilidades.creaFiltroOR(filtros);
-		ArrayList<Reserva> lista = recuperaPorFiltro(filtro);
+		ArrayList<ReservaCompleta> lista = recuperaReservaCompletaPorFiltro(filtro);
 		if (lista!=null) {
 			tableData = new ArrayList<>();
-			for (Reserva reserva : lista) {
+			for (ReservaCompleta reserva : lista) {
 				Vector<Object> filaData = new Vector<>();
 				filaData.add(reserva);
 				filaData.add(reserva.getAsiento());

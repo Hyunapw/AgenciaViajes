@@ -96,7 +96,7 @@ public class Utilidades {
 		return sdf.format(fecha);
 	}
 	
-	public static String creaFiltroAND2 (ArrayList<String> filtros) {
+	public static String creaFiltroAND (ArrayList<String> filtros) {
 		return creaFiltro(filtros, "AND");
 	}
 	
@@ -117,8 +117,13 @@ public class Utilidades {
 	}
 	
 	public static String fechaToSQL (Date fecha) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(fecha);
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			return sdf.format(fecha);
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	public static String fechaHoraToSQLite(Date fecha) {

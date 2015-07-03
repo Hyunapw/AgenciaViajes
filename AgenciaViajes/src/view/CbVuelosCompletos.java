@@ -7,18 +7,18 @@ import javax.swing.JTextField;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import controller.Clientes;
+import model.VueloCompleto;
+import controller.VuelosCompletos;
 import util.Utilidades;
-import model.Cliente;
 
-public class CbClientes extends JComboBox<Cliente> {
+public class CbVuelosCompletos extends JComboBox<VueloCompleto> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String cbFiltro;
 	
-	public CbClientes() {
+	public CbVuelosCompletos() {
 		super();
 		cbFiltro = null;
 		setEditable(true);
@@ -53,27 +53,28 @@ public class CbClientes extends JComboBox<Cliente> {
 	protected void recargarComboFiltrado() {
 		removeAllItems();
 		ArrayList<String> filtros = new ArrayList<>();
-		filtros.add("clientes.cli_nombre LIKE '%" + cbFiltro + "%'");
+		//filtros.add("vuelos. LIKE '%" + cbFiltro + "%'");
+		filtros.add("");
 		String filtroString = Utilidades.creaFiltroOR(filtros);
-		ArrayList<Cliente> lista = new Clientes().recuperaPorFiltro(filtroString);
+		ArrayList<VueloCompleto> lista = new VuelosCompletos().recuperaVueloCompletoPorFiltro(filtroString);
 		if (lista!=null) {
-			for (Cliente c : lista) {
+			for (VueloCompleto c : lista) {
 				addItem(c);
 			}
 			//setSelectedIndex(lista.size()-1);
 		}
 	}
 	
-	public Cliente obtenerClienteSeleccionado() {
+	public VueloCompleto obtenerVueloSeleccionado() {
 		return getItemAt(getSelectedIndex());
 	}
 	
-	public int obtenerClienteIdSeleccionado() {
+	public int obtenerVueloIdSeleccionado() {
 		//Devuelve el ID del Genero selecionado en el Combo
-		return getItemAt(getSelectedIndex()).getCliId();
+		return getItemAt(getSelectedIndex()).getVuId();
 	}
 	
-	public void ponerClienteIdSeleccionado(Integer idCliente) {
+	public void ponerVueloIdSeleccionado(Integer idCliente) {
 		//Devuelve el ID del Genero selecionado en el Combo
 		recargarCombo(idCliente);
 	}
@@ -83,11 +84,11 @@ public class CbClientes extends JComboBox<Cliente> {
 			int idSel = idCliente;
 			int pos = 0;
 			removeAllItems();
-			ArrayList<Cliente> lista = new Clientes().recuperaPorFiltro("clientes.cli_id =" + idCliente);
+			ArrayList<VueloCompleto> lista = new VuelosCompletos().recuperaVueloCompletoPorFiltro("vuelos.vu_id =" + idCliente);
 			if (lista!=null) {
-				for (Cliente c : lista) {
+				for (VueloCompleto c : lista) {
 					addItem(c);
-					if (c.getCliId() == idSel) {
+					if (c.getVuId() == idSel) {
 						setSelectedIndex(pos);
 					}
 					pos++;
@@ -101,9 +102,9 @@ public class CbClientes extends JComboBox<Cliente> {
 	 */
 	public void recargarCombo() {
 		removeAllItems();
-		ArrayList<Cliente> lista = new Clientes().recuperaPorFiltro(null);
+		ArrayList<VueloCompleto> lista = new VuelosCompletos().recuperaVueloCompletoPorFiltro(null);
 		if (lista!=null) {
-			for (Cliente c : lista) {
+			for (VueloCompleto c : lista) {
 				addItem(c);
 			}
 			setSelectedIndex(-1);

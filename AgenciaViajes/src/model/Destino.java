@@ -8,23 +8,23 @@ public class Destino {
 //		    des_lugar TEXT (0) NOT NULL
 //		);
 	
-	Integer id;
+	Integer desId;
 	String lugar;
 	
 	public Destino() {
 	}
 
 	public Destino(Integer id, String lugar) {
-		this.id = id;
+		this.desId = id;
 		this.lugar = lugar;
 	}
 
 	public Integer getId() {
-		return id;
+		return desId;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.desId = id;
 	}
 
 	public String getLugar() {
@@ -37,7 +37,7 @@ public class Destino {
 
 	@Override
 	public String toString() {
-		return "Destino " + id + ", " + lugar;
+		return lugar;
 	}
 
 	

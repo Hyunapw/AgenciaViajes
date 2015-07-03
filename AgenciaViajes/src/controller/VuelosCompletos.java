@@ -3,17 +3,13 @@ package controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.sql.rowset.CachedRowSet;
-
 import util.Utilidades;
-import controller.BDD;
 import model.Avion;
 import model.Destino;
-import model.Vuelo;
 import model.VueloCompleto;
 
-public class VuelosCompletos extends BDD {
+public class VuelosCompletos extends Vuelos {
 	
 	/*	CREATE TABLE vuelos (
     vu_id     INTEGER        PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +21,7 @@ public class VuelosCompletos extends BDD {
     vu_precio DECIMAL (7, 2) NOT NULL
 );*/
 	
-	public ArrayList<VueloCompleto> recuperaPorFiltro(String filtro) {
+	public ArrayList<VueloCompleto> recuperaVueloCompletoPorFiltro(String filtro) {
 		//String sql = "SELECT vu_id, vu_av_id, av_modelo, av_capacidad, vu_des_id, des_lugar, vu_fvuelo, vu_precio FROM vuelos, aviones, destinos WHERE ";
 		String sql = "SELECT * FROM vuelos, aviones, destinos WHERE ";
 		sql += "vuelos.vu_av_id=aviones.av_id AND vuelos.vu_des_id=destinos.des_id AND (";
@@ -53,25 +49,25 @@ public class VuelosCompletos extends BDD {
 		return lista;
 	}
 	
-	public ArrayList<VueloCompleto> recuperaTodos(){
-		return recuperaPorFiltro(null);
+	public ArrayList<VueloCompleto> recuperaTodosVuelosCompletos(){
+		return recuperaVueloCompletoPorFiltro(null);
 	}
 	
-	public VueloCompleto recuperaPorId(int id){
+	public VueloCompleto recuperaVueloCompletoPorId(int id){
 		if (id != 0) {
 			String filtro = "vuelos.vu_id = " + id;
-			ArrayList<VueloCompleto> lista = recuperaPorFiltro(filtro);
+			ArrayList<VueloCompleto> lista = recuperaVueloCompletoPorFiltro(filtro);
 			return lista.get(0);
 		} else {
 			VueloCompleto c = new VueloCompleto();
-			c.setId(0);
+			c.setVuId(0);
 			return c;
 		}
 	}
 	
 	public Integer grabar(VueloCompleto vu) {
 		String sql = null;
-		if (vu.getId()==null) {
+		if (vu.getVuId()==null) {
 			/*SQLite*/
 			sql = "INSERT INTO vuelos (vu_av_id, vu_des_id, vu_fvuelo, vu_precio) VALUES (" +
 					vu.getAv_id() + "," +
@@ -85,7 +81,7 @@ public class VuelosCompletos extends BDD {
 					"vu_des_id=" + vu.getDes_id() + "," +
 					"vu_fvuelo='" + Utilidades.fechaHoraToSQLite(vu.getFvuelo()) + "'," +
 					"vu_precio=" + vu.getPrecio() +
-					" WHERE vuelos.vu_id = " + vu.getId()
+					" WHERE vuelos.vu_id = " + vu.getVuId()
 					;
 		}
 		return ejecutaSQL(sql);
@@ -94,14 +90,31 @@ public class VuelosCompletos extends BDD {
 	/*
 	 * RECUPERAR TABLAS ESPECIALES
 	 * */
-	public ArrayList<Vector<Object>> recuperaTablaVuelos(String txtFiltro) {
+	public ArrayList<Vector<Object>> recuperaTablaVuelosCompletos(String txtFiltro) {
 		ArrayList<Vector<Object>> tableData = null;
 		ArrayList<String> filtros = new ArrayList<>();
 		filtros.add("vuelos.vu_precio LIKE '%" + txtFiltro + "%'");
 		filtros.add("destinos.des_lugar LIKE '%" + txtFiltro + "%'");
 		filtros.add("aviones.av_modelo LIKE '%" + txtFiltro + "%'");
 		String filtro = Utilidades.creaFiltroOR(filtros);
-		ArrayList<VueloCompleto> lista = recuperaPorFiltro(filtro);
+		ArrayList<VueloCompleto> lista = recuperaVueloCompletoPorFiltro(filtro);
+		if (lista!=null) {
+			tableData = new ArrayList<>();
+			for (VueloCompleto vuelo : lista) {
+				Vector<Object> filaData = new Vector<>();
+				filaData.add(vuelo);
+				filaData.add(vuelo.getCapacidad());
+				filaData.add(vuelo.getPrecio());
+				tableData.add(filaData);
+			}
+		}
+		return tableData;
+	}
+	
+	public ArrayList<Vector<Object>> recuperaTablaVuelosCompletos(ArrayList<String> filtros) {
+		ArrayList<Vector<Object>> tableData = null;
+		String filtro = Utilidades.creaFiltroAND(filtros);
+		ArrayList<VueloCompleto> lista = recuperaVueloCompletoPorFiltro(filtro);
 		if (lista!=null) {
 			tableData = new ArrayList<>();
 			for (VueloCompleto vuelo : lista) {

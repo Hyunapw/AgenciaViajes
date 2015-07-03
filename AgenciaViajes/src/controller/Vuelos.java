@@ -51,21 +51,21 @@ public class Vuelos extends BDD {
 		return recuperaPorFiltro(null);
 	}
 	
-	public Vuelo recuperaPorId(int id){
-		if (id != 0) {
-			String filtro = "vuelos.vu_id = " + id;
+	public Vuelo recuperaPorId(int vuId){
+		if (vuId != 0) {
+			String filtro = "vuelos.vu_id = " + vuId;
 			ArrayList<Vuelo> lista = recuperaPorFiltro(filtro);
 			return lista.get(0);
 		} else {
 			Vuelo c = new Vuelo();
-			c.setId(0);
+			c.setVuId(0);
 			return c;
 		}
 	}
 	
 	public Integer grabar(Vuelo vu) {
 		String sql = null;
-		if (vu.getId()==null) {
+		if (vu.getVuId()==null) {
 			/*SQLite*/
 			sql = "INSERT INTO vuelos (vu_av_id, vu_des_id, vu_fvuelo, vu_precio) VALUES (" +
 					vu.getAv_id() + "," +
@@ -79,7 +79,7 @@ public class Vuelos extends BDD {
 					"vu_des_id=" + vu.getDes_id() + "," +
 					"vu_fvuelo='" + Utilidades.fechaHoraToSQLite(vu.getFvuelo()) + "'," +
 					"vu_precio=" + vu.getPrecio() +
-					" WHERE vuelos.vu_id = " + vu.getId()
+					" WHERE vuelos.vu_id = " + vu.getVuId()
 					;
 		}
 		return ejecutaSQL(sql);

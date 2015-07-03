@@ -2,22 +2,22 @@ package model;
 
 public class Cliente {
 	
-	private Integer id;
+	private Integer cliId;
 	private String nombre;
 	
 	public Cliente() {
 	}
 
 	public Cliente(Integer id, String nombre) {
-		this.id = id;
+		this.cliId = id;
 		this.nombre = nombre;
 	}
 	
-	public Integer getId() {
-		return id;
+	public Integer getCliId() {
+		return cliId;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setCliId(Integer id) {
+		this.cliId = id;
 	}
 	public String getNombre() {
 		return nombre;
@@ -28,6 +28,6 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente " + id + ", " + nombre + "";
+		return "Cliente " + cliId + ", " + nombre + "";
 	}
 }

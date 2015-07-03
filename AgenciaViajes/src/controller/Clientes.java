@@ -41,21 +41,21 @@ public class Clientes extends BDD {
 		return recuperaPorFiltro(null);
 	}
 	
-	public Cliente recuperaPorId(int id){
-		if (id != 0) {
-			String filtro = "clientes.cli_id = " + id;
+	public Cliente recuperaPorId(int cliId){
+		if (cliId != 0) {
+			String filtro = "clientes.cli_id = " + cliId;
 			ArrayList<Cliente> lista = recuperaPorFiltro(filtro);
 			return lista.get(0);
 		} else {
 			Cliente c = new Cliente();
-			c.setId(0);
+			c.setCliId(0);
 			return c;
 		}
 	}
 	
 	public Integer grabar(Cliente cli) {
 		String sql = null;
-		if (cli.getId()==null) {
+		if (cli.getCliId()==null) {
 			/*SQLite*/
 			sql = "INSERT INTO clientes (cli_nombre) VALUES ('"+ cli.getNombre() +"')";
 			/*MySQL
@@ -63,7 +63,7 @@ public class Clientes extends BDD {
 					"clientes.cli_nombre = '" + cli.getNombre() + "' "*/
 		} else {		
 			sql = "UPDATE clientes SET " +
-					"cli_nombre = '" + cli.getNombre() + "' WHERE clientes.cli_id = " + cli.getId()
+					"cli_nombre = '" + cli.getNombre() + "' WHERE clientes.cli_id = " + cli.getCliId()
 					;
 		}
 		return ejecutaSQL(sql);

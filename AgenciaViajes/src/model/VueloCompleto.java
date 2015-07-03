@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import util.Utilidades;
+
 public class VueloCompleto {
 	
 	Vuelo vuelo;
@@ -30,11 +32,11 @@ public class VueloCompleto {
 	public void setVuelo(Vuelo vuelo) {
 		this.vuelo = vuelo;
 	}
-	public Integer getId() {
-		return vuelo.getId();
+	public Integer getVuId() {
+		return vuelo.getVuId();
 	}
-	public void setId(Integer id) {
-		vuelo.setId(id);
+	public void setVuId(Integer id) {
+		vuelo.setVuId(id);
 	}
 	public Date getFvuelo() {
 		return vuelo.getFvuelo();
@@ -96,10 +98,10 @@ public class VueloCompleto {
 	public void setLugar(String lugar) {
 		destino.setLugar(lugar);
 	}
-	
-	//METODO PARA CONVERTIR DE VUELOCOMPLETO A VUELO
-	public Vuelo toVuelo() {
-		return new Vuelo(this.getId(), this.getAv_id(), this.getDes_id(), this.getFvuelo(), this.getPrecio());
+
+	@Override
+	public String toString() {
+		return Utilidades.fechaHoraToSQLite(getFvuelo()) + " Vuelo " + getVuId() + " a " + getLugar() + " en " + getModelo();
 	}
 
 }
