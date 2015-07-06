@@ -2,6 +2,13 @@ package view;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+
+import model.Avion;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
 
 public class Pruebas extends JFrame{
 	/**
@@ -28,11 +35,19 @@ public class Pruebas extends JFrame{
 		getContentPane().add(cbDestinos);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(34, 146, 566, 147);
+		scrollPane.setBounds(34, 146, 270, 147);
 		getContentPane().add(scrollPane);
 		
 		table = new TbVuelosCompletos("");
 		scrollPane.setViewportView(table);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(330, 11, 270, 282);
+		panel.setLayout(null);
+		getContentPane().add(panel);
+		
+		PnAsientosAvion pnAsientosAvion = new PnAsientosAvion(new Avion(0, "AirBus", 16) , null);
+		panel.add(pnAsientosAvion);
 		
 		setVisible(true);
 	}

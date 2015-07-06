@@ -104,7 +104,11 @@ public class TbVuelosCompletos extends JTable {
 	}
 	
 	public void actualizarTabla(ArrayList<String> filtros) {
-		this.setFiltro(Utilidades.creaFiltroAND(filtros));
+		if (filtros!=null) {
+			this.setFiltro(Utilidades.creaFiltroAND(filtros));
+		} else {
+			this.setFiltro(null);
+		}
 		ArrayList<Vector<Object>> tabla = new VuelosCompletos().recuperaTablaVuelosCompletos(filtros);
 		if (tabla!=null) {
 			DefaultTableModel dtm = (DefaultTableModel) getModel();

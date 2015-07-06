@@ -79,7 +79,7 @@ public class DlgReserva extends JDialog {
 		numAsiento.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		centro.add(numAsiento, "4, 6");
 		
-		PnAsientos pnAsientos = new PnAsientos();
+		JPanel pnAsientos = new JPanel();
 		centro.add(pnAsientos, "4, 8, fill, fill");
 		
 		JPanel sur = new JPanel();
@@ -114,8 +114,8 @@ public class DlgReserva extends JDialog {
 			cbVuelos.ponerVueloIdSeleccionado(reserva.getVu_id());
 			numAsiento.setValue((Integer) reserva.getAsiento());
 		} else {
-			cbClientes.setSelectedIndex(-1);
-			cbVuelos.setSelectedIndex(-1);
+			cbClientes.setSelectedIndex(reserva.getCli_id());
+			cbVuelos.setSelectedIndex(reserva.getVu_id());
 			numAsiento.setValue(0.0);
 		}
 	}
